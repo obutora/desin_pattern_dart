@@ -4,6 +4,8 @@ abstract class NewsSubject {
   void addObserver(NewsObserver observer);
   void removeObserver(NewsObserver observer);
   void notifyObservers();
+
+  DateTime now();
 }
 
 // Observer に変更を通知するための実装
@@ -11,6 +13,7 @@ abstract class NewsSubject {
 class NewsData implements NewsSubject {
   List<NewsObserver> news = [];
 
+  @override
   DateTime now() => DateTime.now();
 
   @override
@@ -37,7 +40,7 @@ class NewsData implements NewsSubject {
 abstract class NewsObserver {
   // あとで NewsData の now() を使ってデータをpullするために、newsDataを保持しておく
   // 一方、push型の場合は、newsDataをObserverが知らなくても良いので保持する必要もない。
-  late NewsData newsData;
+  late NewsSubject newsData;
   void update();
 }
 
@@ -53,7 +56,7 @@ mixin NewsNum {
 // with NewsNum で NewsNum のメンバを追加している
 class SportsNews with NewsNum implements NewsObserver {
   @override
-  late NewsData newsData;
+  late NewsSubject newsData;
 
   SportsNews(this.newsData);
 
@@ -73,7 +76,7 @@ class SportsNews with NewsNum implements NewsObserver {
 // このように、update() の中身を変えることで、Observerごとに異なる処理を実装できる
 class WeatherNews with NewsNum implements NewsObserver {
   @override
-  late NewsData newsData;
+  late NewsSubject newsData;
   WeatherNews(this.newsData);
 
   final int newsRatio = 5;
@@ -89,7 +92,7 @@ class WeatherNews with NewsNum implements NewsObserver {
 // 実装はほぼ SportsNews と同じだが、テストでSubjectから削除されていることを確認するために用意した。
 class VarietyNews with NewsNum implements NewsObserver {
   @override
-  late NewsData newsData;
+  late NewsSubject newsData;
   VarietyNews(this.newsData);
 
   @override
