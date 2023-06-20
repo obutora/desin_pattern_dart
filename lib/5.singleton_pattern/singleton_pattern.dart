@@ -6,6 +6,8 @@ class Singleton {
   // インスタンスの生成をクラス内からのみに制限している
   Singleton._();
 
+  // コンストラクタに外部からアクセスできないため、
+  // factory constructorを用いて、インスタンスを生成する
   factory Singleton() {
     return Singleton._();
   }
